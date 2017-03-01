@@ -160,6 +160,14 @@
         <h3 id="startLat"></h3>
         <p>longitude</p>
         <h3 id="startLon"></h3>
+
+        
+        <br>
+        <br>
+
+        <input type="file" accept="audio/*" capture="microphone" id="recorder">
+        <audio id="player" controls></audio>
+
     </div>
 
 
@@ -226,6 +234,7 @@
                 var isSup = 'geolocation' in navigator;
                 document.getElementById('ifGeoSupport').innerHTML = '支持定位: ' + isSup;
 
+                //测试网页监听设备旋转
                 if (window.DeviceOrientationEvent) {
                   document.getElementById("ifOrientationSupport").innerText = "支持检测旋转: true";
                 }else{
@@ -233,12 +242,25 @@
                 }
 
 
+                //监听设备的定位功能
                 if('geolocation' in navigator){
                     navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
                 }else{
                     document.getElementById('startLat').innerHTML = 'your browser doesn\'t support geolocation';
                     document.getElementById('startLon').innerHTML = 'your browser doesn\'t support geolocation';
                 }
+
+                //使用网页录音功能
+                var recorder = document.getElementById('recorder');
+                var player = document.getElementById('player');
+
+                recorder.addEventListener('change', function(e) {
+                    var file = e.target.files[0];
+                    //处理文件
+                    player.src = URL.createObjectURL(file);
+                });
+
+
             }, 3000);
 
 
