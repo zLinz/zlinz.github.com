@@ -210,7 +210,7 @@
                 document.getElementById('startLon').innerHTML = startPos.coords.longitude;
             }
 
-            var geoError = function(position) {
+            var geoError = function(error) {
                 console.log('Error occurred. Error code: ' + error.code);
                 alert(error.code);
                 // error.code can be:
