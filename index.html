@@ -226,7 +226,7 @@
 
             var geoError = function(error) {
                 console.log('Error occurred. Error code: ' + error.code);
-                alert(error.code);
+                // alert(error.code);
                 // error.code can be:
                 //   0: unknown error
                 //   1: permission denied
@@ -265,56 +265,58 @@
                 //     player.src = URL.createObjectURL(file);
                 // });
 
-                navigator.permissions.query({name:'microphone'}).then(function(result) {
-                  if (result.state == 'granted') {
 
-                        var shouldStop = false;
-                        var stopped = false;
-                        var downloadLink = document.getElementById('download');
-                        var stopButton = document.getElementById('stop');
-                        stopButton.addEventListener('click', function() {
-                            shouldStop = true;
-                        });
+                var shouldStop = false;
+                var stopped = false;
+                var downloadLink = document.getElementById('download');
+                var stopButton = document.getElementById('stop');
+                stopButton.addEventListener('click', function() {
+                    shouldStop = true;
+                });
 
-                        var handleSuccess = function(stream) {
-                            var options = {mimeType: 'video/webm;codecs=vp9'};
-                            var recordedChunks = [];
-                            var mediaRecorder = new MediaRecorder(stream, options);
+                var handleSuccess = function(stream) {
+                    var options = {mimeType: 'video/webm;codecs=vp9'};
+                    var recordedChunks = [];
+                    var mediaRecorder = new MediaRecorder(stream, options);
 
-                            mediaRecorder.addEventListener('dataacailable', function(e) {
-                                if(e.data.size > 0){
-                                    recordedChunks.push(e.data);
-                                }
-
-                                if(shouldStop === true && stopped === false){
-                                    mediaRecorder.stop();
-                                    stopped = true;
-                                }
-
-                            });
-
-                            mediaRecorder.addEventListener('stop', function() {
-                                downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
-                                downloadLink.download = 'acetest.wav';
-                            });
-
-                            mediaRecorder.start();
-
+                    mediaRecorder.addEventListener('dataacailable', function(e) {
+                        if(e.data.size > 0){
+                            recordedChunks.push(e.data);
                         }
 
-                        navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(handleSuccess);
+                        if(shouldStop === true && stopped === false){
+                            mediaRecorder.stop();
+                            stopped = true;
+                        }
 
-                  } else if (result.state == 'prompt') {
+                    });
 
-                  } else if (result.state == 'denied') {
+                    mediaRecorder.addEventListener('stop', function() {
+                        downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+                        downloadLink.download = 'acetest.wav';
+                    });
 
-                  }
-                  result.onchange = function() {
+                    mediaRecorder.start();
 
-                  };
-                }).catch(function(e) {
-                    console.log(e);
-                });
+                }
+
+                navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(handleSuccess);
+
+                // navigator.permissions.query({name:'microphone'}).then(function(result) {
+                //     alert(result.state);
+                //   if (result.state == 'granted') {
+
+                //   } else if (result.state == 'prompt') {
+
+                //   } else if (result.state == 'denied') {
+
+                //   }
+                //   result.onchange = function() {
+
+                //   };
+                // }).catch(function(e) {
+                //     console.log(e);
+                // });
 
 
             }, 3000);
