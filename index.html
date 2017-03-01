@@ -6,6 +6,7 @@
 <title>预加载DEMO</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="" rel="stylesheet">
 <style type="text/css">
     #loader-wrapper{
@@ -165,8 +166,12 @@
         <br>
         <br>
 
-        <input type="file" accept="audio/*" capture="microphone" id="recorder">
-        <audio id="player" controls></audio>
+        <!-- <input type="file" accept="audio/*" capture="microphone" id="recorder">
+        <audio id="player" controls></audio> -->
+
+        <a id="download">Download</a>
+        <button id="stop">Stop</button>
+
 
     </div>
 
@@ -251,13 +256,64 @@
                 }
 
                 //使用网页录音功能
-                var recorder = document.getElementById('recorder');
-                var player = document.getElementById('player');
+                // var recorder = document.getElementById('recorder');
+                // var player = document.getElementById('player');
 
-                recorder.addEventListener('change', function(e) {
-                    var file = e.target.files[0];
-                    //处理文件
-                    player.src = URL.createObjectURL(file);
+                // recorder.addEventListener('change', function(e) {
+                //     var file = e.target.files[0];
+                //     //处理文件
+                //     player.src = URL.createObjectURL(file);
+                // });
+
+                navigator.permissions.query({name:'microphone'}).then(function(result) {
+                  if (result.state == 'granted') {
+
+                        var shouldStop = false;
+                        var stopped = false;
+                        var downloadLink = document.getElementById('download');
+                        var stopButton = document.getElementById('stop');
+                        stopButton.addEventListener('click', function() {
+                            shouldStop = true;
+                        });
+
+                        var handleSuccess = function(stream) {
+                            var options = {mimeType: 'video/webm;codecs=vp9'};
+                            var recordedChunks = [];
+                            var mediaRecorder = new MediaRecorder(stream, options);
+
+                            mediaRecorder.addEventListener('dataacailable', function(e) {
+                                if(e.data.size > 0){
+                                    recordedChunks.push(e.data);
+                                }
+
+                                if(shouldStop === true && stopped === false){
+                                    mediaRecorder.stop();
+                                    stopped = true;
+                                }
+
+                            });
+
+                            mediaRecorder.addEventListener('stop', function() {
+                                downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+                                downloadLink.download = 'acetest.wav';
+                            });
+
+                            mediaRecorder.start();
+
+                        }
+
+                        navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(handleSuccess);
+
+                  } else if (result.state == 'prompt') {
+
+                  } else if (result.state == 'denied') {
+
+                  }
+                  result.onchange = function() {
+
+                  };
+                }).catch(function(e) {
+                    console.log(e);
                 });
 
 
