@@ -154,7 +154,8 @@
     <div class="content">
         <h2>https://zlinz.github.io</h2>
         <p>linzhizhaoooo's github page</p>
-        <p id="ifSupport"></p>
+        <p id="ifGeoSupport"></p>
+        <p id="ifOrientationSupport"></p>
         <p>latitude:</p>
         <h3 id="startLat"></h3>
         <p>longitude</p>
@@ -205,7 +206,7 @@
 
             var geoSuccess = function(position) {
                 startPos = position;
-                alert("success!");
+                // alert("success!");
                 document.getElementById('startLat').innerHTML = startPos.coords.latitude;
                 document.getElementById('startLon').innerHTML = startPos.coords.longitude;
             }
@@ -223,7 +224,15 @@
             setTimeout(function() {
                 addClass(bd[0], 'loaded');
                 var isSup = 'geolocation' in navigator;
-                document.getElementById('ifSupport').innerHTML = isSup;
+                document.getElementById('ifGeoSupport').innerHTML = '支持定位: ' + isSup;
+
+                if (window.DeviceOrientationEvent) {
+                  document.getElementById("ifOrientationSupport").innerText = "支持检测旋转: true";
+                }else{
+                    document.getElementById("ifOrientationSupport").innerText = "支持检测旋转: false";
+                }
+
+
                 if('geolocation' in navigator){
                     navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
                 }else{
