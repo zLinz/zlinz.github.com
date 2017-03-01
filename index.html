@@ -220,7 +220,11 @@
 
             setTimeout(function() {
                 addClass(bd[0], 'loaded');
-                navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+                if('geolocation' in navigator){
+                    navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+                }else{
+                    alert('your browser doesn\'t support geolocation');
+                }
             }, 3000);
 
 
