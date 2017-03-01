@@ -224,7 +224,7 @@
                 var isSup = 'geolocation' in navigator;
                 document.getElementById('ifSupport').innerHTML = isSup;
                 if('geolocation' in navigator){
-                    navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+                    navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
                 }else{
                     document.getElementById('startLat').innerHTML = 'your browser doesn\'t support geolocation';
                     document.getElementById('startLon').innerHTML = 'your browser doesn\'t support geolocation';
