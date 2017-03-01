@@ -154,18 +154,17 @@
     <div class="content">
         <h2>https://zlinz.github.io</h2>
         <p>linzhizhaoooo's github page</p>
-
+        <p>latitude:</p>
+        <h3 id="startLat"></h3>
+        <p>longitude</p>
+        <h3 id="startLon"></h3>
     </div>
 
 
     <script type="text/javascript">
         (function() {
 
-            var bd = document.getElementsByTagName('body');
-
-            console.log(bd);
-
-            function hasClass(el, className){
+            function hasClass(el, className) {
                 console.log('classList: ' + el.classList);
                 if(el.classList){
                     return el.classList.contains(className);
@@ -174,15 +173,17 @@
                 }
             }
 
-            function addClass(el, className){
+            function addClass(el, className) {
+                console.log('classList before: ' + el.classList);
                 if(el.classList){
                     el.classList.add(className);
+                    console.log('classList after: ' + el.classList);
                 }else if(!hasClass(el, className)){
                     el.className += " " + className;
                 }
             }
 
-            function removeClass(el, className){
+            function removeClass(el, className) {
                 if(el.classList){
                     el.classList.remove(className);
                 }else if(hasClass(el, className)){
@@ -191,8 +192,35 @@
                 }
             }
 
-            setTimeout(function(){
+            var bd = document.getElementsByTagName('body');
+
+            var startPos;
+
+            var geoOptions = {
+                maximumAge: 5 * 60 * 1000,
+                timeout: 10 * 1000,
+                enableHighAccuracy: true
+            }
+
+            var geoSuccess = function(position) {
+                startPos = position;
+                document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+                document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+            }
+
+            var geoError = function(position) {
+                console.log('Error occurred. Error code: ' + error.code);
+                alert(error.code);
+                // error.code can be:
+                //   0: unknown error
+                //   1: permission denied
+                //   2: position unavailable (error response from location provider)
+                //   3: timed out
+            }
+
+            setTimeout(function() {
                 addClass(bd[0], 'loaded');
+                navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
             }, 3000);
 
 
