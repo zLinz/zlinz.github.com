@@ -175,7 +175,7 @@
 
     </div>
 
-
+    <script type="text/javascript" src="./adapter.js"></script>
     <script type="text/javascript">
         (function() {
 
@@ -292,7 +292,7 @@
                 });
 
                 mediaRecorder.addEventListener('stop', function() {
-                    alert('stop');
+                  alert('stop');
                   downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
                   downloadLink.download = 'acetest.wav';
                 });
@@ -301,7 +301,9 @@
               };
 
               navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-                  .then(handleSuccess);
+                  .then(handleSuccess).catch(function(e) {
+                     alert('您的浏览器不支持麦克风！');
+                  });
 
                 // navigator.permissions.query({name:'microphone'}).then(function(result) {
                 //     alert(result.state);
