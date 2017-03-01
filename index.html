@@ -154,6 +154,7 @@
     <div class="content">
         <h2>https://zlinz.github.io</h2>
         <p>linzhizhaoooo's github page</p>
+        <p id="ifSupport"></p>
         <p>latitude:</p>
         <h3 id="startLat"></h3>
         <p>longitude</p>
@@ -220,10 +221,13 @@
 
             setTimeout(function() {
                 addClass(bd[0], 'loaded');
+                var isSup = 'geolocation' in navigator;
+                document.getElementById('ifSupport').innerHTML = isSup;
                 if('geolocation' in navigator){
                     navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
                 }else{
-                    alert('your browser doesn\'t support geolocation');
+                    document.getElementById('startLat').innerHTML = 'your browser doesn\'t support geolocation';
+                    document.getElementById('startLon').innerHTML = 'your browser doesn\'t support geolocation';
                 }
             }, 3000);
 
