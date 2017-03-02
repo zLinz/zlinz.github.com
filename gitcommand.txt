@@ -15,7 +15,7 @@ git log //查看日志
 git log -p -2 //限制查看两条日志
 git remote //查看所有的远程仓库, 加上-v的话，显示url
 git fetch origin //抓取远程仓库的内容
-git merge to local //将fetch到的内容合并到本地
+git merge master //将fetch到的内容合并到本地
 git pull //等于fetch + merge to local
 git tag // 添加标签
 git branch name //创建一个名为name的分支
@@ -23,3 +23,4 @@ git checkout name // 将当前分支改为name分支
 git log --oneline --decorate //显示所有分支，并显示当前分支的信息
 git reset HEAD file //将文件从暂存区移除
 git show //显示当前分支的状态
+git checkout -b branchname //创建一个分区并且切换到该分区
