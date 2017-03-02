@@ -1,71 +1,341 @@
 <!DOCTYPE html>
-<html><head>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Audio Recorder</title>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>预加载DEMO</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="" rel="stylesheet">
+<style type="text/css">
+    #loader-wrapper{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+    }
+    #loader{
+        display: block;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        width: 150px;
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border: 3px solid transparent;
+        border-top-color: #3498db;
+        z-index: 1500;
+        border-radius: 50%;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+    #loader:before{
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        border: 3px solid transparent;
+        border-top-color: #e74c3c;
+        border-radius: 50%;
+        -webkit-animation: spin 3s linear infinite;
+        animation: spin 3s linear infinite;
+    }
+    #loader:after{
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        border: 3px solid transparent;
+        border-top-color: #f9c922;
+        border-radius: 50%;
+        -webkit-animation: spin 1.5s linear infinite;
+        animation: spin 1.5s linear infinite;
+    }
+    /* include this only once */
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+            -ms-transform: rotate(0deg);  /* IE 9 */
+            transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+        }
+        100% {
+            -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+            -ms-transform: rotate(360deg);  /* IE 9 */
+            transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+        }
+    }
+    @keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+            -ms-transform: rotate(0deg);  /* IE 9 */
+            transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+        }
+        100% {
+            -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+            -ms-transform: rotate(360deg);  /* IE 9 */
+            transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+        }
+    }
 
-    <script src="js/audiodisplay.js"></script>
-    <script src="js/recorder.js"></script>
-    <script src="js/main.js"></script>
-    <style>
-    html { overflow: hidden; }
-    body { 
-        font: 14pt Arial, sans-serif; 
-        background: lightgrey;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        width: 100%;
-        margin: 0 0;
-    }
-    canvas { 
-        display: inline-block; 
-        background: #202020; 
-        width: 95%;
-        height: 45%;
-        box-shadow: 0px 0px 10px blue;
-    }
-    #controls {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-        height: 20%;
-        width: 100%;
-    }
-    #record { height: 15vh; }
-    #record.recording { 
-        background: red;
-        background: -webkit-radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%); 
-        background: -moz-radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%); 
-        background: radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%); 
-    }
-    #save, #save img { height: 10vh; }
-    #save { opacity: 0.25;}
-    #save[download] { opacity: 1;}
-    #viz {
-        height: 80%;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-    }
-    @media (orientation: landscape) {
-        body { flex-direction: row;}
-        #controls { flex-direction: column; height: 100%; width: 10%;}
-        #viz { height: 100%; width: 90%;}
+    #loader-wrapper .loader-section {
+        position: fixed;
+        top: 0;
+        width: 51%;
+        height: 100%;
+        background: #222222;
+        z-index: 1000;
     }
 
-    </style>
-<style>@media print {#ghostery-purple-box {display:none !important}}</style></head>
+    #loader-wrapper .loader-section.section-left {
+        left: 0;
+    }
+
+    #loader-wrapper .loader-section.section-right {
+        right: 0;
+    }
+
+    .loaded #loader-wrapper .loader-section.section-left {
+        -webkit-transform: translateX(-100%);/* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: translateX(-100%);  /* IE 9 */
+        transform: translateX(-100%);  /* Firefox 16+, IE 10+, Opera */
+    }
+
+    .loaded #loader-wrapper .loader-section.section-right {
+        -webkit-transform: translateX(100%);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: translateX(100%);  /* IE 9 */
+        transform: translateX(100%);  /* Firefox 16+, IE 10+, Opera */
+    }
+
+    .loaded #loader {
+        opacity: 0;
+        -webkit-transition: all 0.3s ease-out;
+        transition: all 0.3s ease-out;
+    }
+
+    .loaded #loader-wrapper .loader-section.section-right,
+.loaded #loader-wrapper .loader-section.section-left {
+ 
+        -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000); 
+        transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+    }
+
+    .loaded #loader-wrapper {
+        visibility: hidden;
+        -webkit-transform: translateY(-100%);
+            -ms-transform: translateY(-100%);
+                transform: translateY(-100%);
+ 
+        -webkit-transition: all 0.3s 1s ease-out; 
+                transition: all 0.3s 1s ease-out;
+    }
+
+    #content {
+        margin: 0 auto;
+        padding-bottom: 50px;
+        width: 80%;
+        max-width: 978px;
+    }
+
+</style>
+</head>
 <body>
-    <div id="viz">
-        <canvas id="analyser" width="1024" height="500"></canvas>
-        <canvas id="wavedisplay" width="1024" height="500"></canvas>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
     </div>
-    <div id="controls">
-        <img id="record" src="img/mic128.png" onclick="toggleRecording(this);">
-        <a id="save" href="#"><img src="img/save.svg"></a>
+    <div class="content">
+        <h2>https://zlinz.github.io</h2>
+        <p>linzhizhaoooo's github page</p>
+        <p id="ifGeoSupport"></p>
+        <p id="ifOrientationSupport"></p>
+        <p>latitude:</p>
+        <h3 id="startLat"></h3>
+        <p>longitude</p>
+        <h3 id="startLon"></h3>
+
+        
+        <br>
+        <br>
+
+        <!-- <input type="file" accept="audio/*" capture="microphone" id="recorder">
+        <audio id="player" controls></audio> -->
+
+        <a id="download">Download</a>
+        <button id="stop">Stop</button>
+
+
     </div>
 
-</body></html>
+    <script type="text/javascript" src="./adapter.js"></script>
+    <script type="text/javascript">
+        (function() {
+
+            function hasClass(el, className) {
+                console.log('classList: ' + el.classList);
+                if(el.classList){
+                    return el.classList.contains(className);
+                }else{
+                    return !!el.className.match(new RegExp('\\b' + className + '\\b'));
+                }
+            }
+
+            function addClass(el, className) {
+                console.log('classList before: ' + el.classList);
+                if(el.classList){
+                    el.classList.add(className);
+                    console.log('classList after: ' + el.classList);
+                }else if(!hasClass(el, className)){
+                    el.className += " " + className;
+                }
+            }
+
+            function removeClass(el, className) {
+                if(el.classList){
+                    el.classList.remove(className);
+                }else if(hasClass(el, className)){
+                    var reg = new RegExp('\\b' + className + '\\b');
+                    el.className = el.className.replace(reg, ' ');
+                }
+            }
+
+            var bd = document.getElementsByTagName('body');
+
+            var startPos;
+
+            var geoOptions = {
+                maximumAge: 5 * 60 * 1000,
+                timeout: 10 * 1000,
+                enableHighAccuracy: true
+            }
+
+            var geoSuccess = function(position) {
+                startPos = position;
+                // alert("success!");
+                document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+                document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+            }
+
+            var geoError = function(error) {
+                console.log('Error occurred. Error code: ' + error.code);
+                // alert(error.code);
+                // error.code can be:
+                //   0: unknown error
+                //   1: permission denied
+                //   2: position unavailable (error response from location provider)
+                //   3: timed out
+            }
+
+            setTimeout(function() {
+                addClass(bd[0], 'loaded');
+                var isSup = 'geolocation' in navigator;
+                document.getElementById('ifGeoSupport').innerHTML = '支持定位: ' + isSup;
+
+                //测试网页监听设备旋转
+                if (window.DeviceOrientationEvent) {
+                  document.getElementById("ifOrientationSupport").innerText = "支持检测旋转: true";
+                }else{
+                    document.getElementById("ifOrientationSupport").innerText = "支持检测旋转: false";
+                }
+
+
+                //监听设备的定位功能
+                if('geolocation' in navigator){
+                    navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+                }else{
+                    document.getElementById('startLat').innerHTML = 'your browser doesn\'t support geolocation';
+                    document.getElementById('startLon').innerHTML = 'your browser doesn\'t support geolocation';
+                }
+
+                //使用网页录音功能
+                // var recorder = document.getElementById('recorder');
+                // var player = document.getElementById('player');
+
+                // recorder.addEventListener('change', function(e) {
+                //     var file = e.target.files[0];
+                //     //处理文件
+                //     player.src = URL.createObjectURL(file);
+                // });
+
+                function hasGetUserMedia() {
+                  return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                            navigator.mozGetUserMedia || navigator.msGetUserMedia);
+                }
+
+                if (hasGetUserMedia()) {
+                  // Good to go!
+                  let shouldStop = false;
+                  let stopped = false;
+                  const downloadLink = document.getElementById('download');
+                  const stopButton = document.getElementById('stop');
+
+                  stopButton.addEventListener('click', function() {
+                    shouldStop = true;
+                  })
+
+                  var handleSuccess = function(stream) {  
+                    const options = {mimeType: 'video/webm;codecs=vp9'};
+                    const recordedChunks = [];
+                    const mediaRecorder = new MediaRecorder(stream, options);  
+
+                    mediaRecorder.addEventListener('dataavailable', function(e) {
+                      if (e.data.size > 0) {
+                        recordedChunks.push(e.data);
+                      }
+
+                      if(shouldStop === true && stopped === false) {
+                        mediaRecorder.stop();
+                        stopped = true;
+                      }
+                    });
+
+                    mediaRecorder.addEventListener('stop', function() {
+                      alert('stop');
+                      downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+                      downloadLink.download = 'acetest.wav';
+                    });
+
+                    mediaRecorder.start();
+                  };
+
+                  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                      .then(handleSuccess).catch(function(e) {
+                         alert('您的浏览器不支持麦克风！');
+                      });
+                } else {
+                  alert('getUserMedia() is not supported in your browser');
+                }
+
+                // navigator.permissions.query({name:'microphone'}).then(function(result) {
+                //     alert(result.state);
+                //   if (result.state == 'granted') {
+
+                //   } else if (result.state == 'prompt') {
+
+                //   } else if (result.state == 'denied') {
+
+                //   }
+                //   result.onchange = function() {
+
+                //   };
+                // }).catch(function(e) {
+                //     console.log(e);
+                // });
+
+
+            }, 3000);
+
+
+        })();
+
+    </script>
+</body>
+</html>
