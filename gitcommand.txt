@@ -1,11 +1,20 @@
-git init //初始化仓库
-git config //获取配置信息
-git help command //联网获取帮助
-git status //查看当前工作目录的状态
-git clone url  //克隆远程仓库到本地
-git add --all //可选择文件夹，所有文件，单个文件
-git commit -m "log" //提交到本地仓库，必须添加日志
-git diff //查看本地仓库的与正在修改的不同的地方
+git init //初始化仓库，此时可以运行git status查看情况
+
+git config //获取配置信息，一般运行git config --list查看所有的。然后使用 git 
+config --add user.name和git config --add user.email
+
+git help command //联网获取帮助,man git command或者man git-command
+
+git status //查看当前工作目录的状态，git status -s查看简短的信息
+
+git clone url  //克隆远程仓库到本地,远程的仓库名叫origin，本地创建一个分支叫做master
+
+git add --all //将所有文件添加成暂存待提交的状态，可选择文件夹，所有文件，单个文件
+
+git commit -m "log" //将本分支暂存的文件提交到本地仓库，必须添加日志
+
+git diff //查看本地仓库的与正在修改的不同的地方，git diff 查看当前还没有暂存的修改，git diff --cached查看当前暂状态中的修改
+
 git push origin master // 推送到远程仓库 origin为远程仓库.master为本地仓库
 git checkout origin //撤销操作
 git rm file //删除本地文件
@@ -21,8 +30,8 @@ git tag // 添加标签
 git branch //查看当前所有分支
 git branch -v //查看每个分支的最后一次提交
 git branch name //创建一个名为name的分支
-git checkout name // 将当前分支改为name分支
-git log --oneline --decorate //显示所有分支，并显示当前分支的信息
+git checkout name // 将当前分支改为name分支，将HEAD指针直到当前分支
+git log --oneline --decorate --graph --all //显示所有分支，并显示当前分支的信息
 git reset HEAD file //将文件从暂存区移除
 git show //显示当前分支的状态
 git checkout -b branchname //创建一个分区并且切换到该分区

@@ -185,6 +185,18 @@
     <script type="text/javascript">
         (function() {
 
+            // function isSuccess(str){
+            //     console.log(str);
+            // }
+
+           var isSuccess = {
+                haha: function(str){
+                    console.log(str);
+                }
+           }
+
+           isSuccess.haha `https://devexpress.github.io/testcafe/example/`;
+
             function hasClass(el, className) {
                 console.log('classList: ' + el.classList);
                 if(el.classList){
@@ -340,6 +352,15 @@
                 //gremlins.createHorde().unleash();
 
             }, 3000);
+
+            
+            var a = {};
+            a.x = 1;
+            var b = Object.create(a);
+            console.dir(JSON.stringify(b));
+            b.x = 5;
+            b.y = 2;
+            console.dir(JSON.stringify(b));
 
 
         })();
