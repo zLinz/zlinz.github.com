@@ -11,28 +11,48 @@ git clone url  //克隆远程仓库到本地,远程的仓库名叫origin，本�
 
 git add --all //将所有文件添加成暂存待提交的状态，可选择文件夹，所有文件，单个文件
 
-git commit -m "log" //将本分支暂存的文件提交到本地仓库，必须添加日志
+git reset HEAD name//将文件的暂存状态取消
+
+git commit -m "log" //将本分支暂存的文件提交到本地仓库，必须添加日志，git commit --amend表示将上次的更新替换成这次的更新
 
 git diff //查看本地仓库的与正在修改的不同的地方，git diff 查看当前还没有暂存的修改，git diff --cached查看当前暂状态中的修改
 
-git push origin master // 推送到远程仓库 origin为远程仓库.master为本地仓库
-git checkout origin //撤销操作
-git rm file //删除本地文件
+git push origin master // 推送到远程仓库 origin为远程仓库.master为本地仓库，作为备份使用
+
+git checkout origin //撤销操作，撤销自从上一次的修改操作，git checkout -- file撤销这个文件上次的操作
+
+git mv file_from file_to//移动文件
+
+git rm file //删除本地文件，从已跟踪和未跟踪中全部删除，git rm file --cached只是从仓库删除，本地文件不删除
+
 git rm file -f //强制删除本地文件
-git pull //将远程仓库的文件更新到本地
+
 git log //查看日志
+
 git log -p -2 //限制查看两条日志
-git remote //查看所有的远程仓库, 加上-v的话，显示url
-git fetch origin //抓取远程仓库的内容
-git merge master //将fetch到的内容合并到本地
-git pull //等于fetch + merge to local
-git tag // 添加标签
+
+git remote //查看所有的远程仓库, 加上-v的话，显示url，git remote remote_name表示添加远程仓库，git remote show展示所有远程仓库的信息，git remote show remote_name展示特定远程仓库与本地仓库的一些相关信息，git remote rename remote_name_from remote_name_to更改远程仓库名字，git remote rm remote_name删除特定远程仓库
+
+git fetch origin //抓取远程仓库的内容,但不会自动合并到当前的工作中去
+
+git merge branch_name //将fetch到的内容合并到本地，在此之前记得切换回主分支
+
+git pull //等于fetch + merge to local，将远程仓库的文件更新到本地
+
+git tag // 添加标签，打标签，添加特定信息
+
 git branch //查看当前所有分支
+
 git branch -v //查看每个分支的最后一次提交
-git branch name //创建一个名为name的分支
-git checkout name // 将当前分支改为name分支，将HEAD指针直到当前分支
+
+git branch name //创建一个名为name的分支,git branch -d branchname删除某分支
+
+git checkout name // 将当前分支改为name分支，将HEAD指针指到当前分支,git checkout -b name则表示创建并切换到那个分区
+
 git log --oneline --decorate --graph --all //显示所有分支，并显示当前分支的信息
+
 git reset HEAD file //将文件从暂存区移除
+
 git show //显示当前分支的状态
+
 git checkout -b branchname //创建一个分区并且切换到该分区
-git branch -d branchname // 删除某分支
