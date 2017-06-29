@@ -43,7 +43,7 @@ git tag // 添加标签，打标签，添加特定信息
 
 git branch //查看当前所有分支
 
-git branch -v //查看每个分支的最后一次提交
+git branch -v //查看每个分支的最后一次提交，git branch --merged显示已经合并到当前分支的分支，显示出来不带*号的可以删除。git branch --no-merged显示还未合并到当前分支的分支，他们必须强制才能删除
 
 git branch name //创建一个名为name的分支,git branch -d branchname删除某分支
 
